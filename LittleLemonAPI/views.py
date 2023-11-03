@@ -25,20 +25,33 @@ class SingleMenuItemView(generics.RetrieveUpdateDestroyAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
 
-# @api_view(["GET", "POST"])
-# def menu_items(request):
-#     # Get Request
-#     if request.method == "GET":
-#         items = MenuItem.objects.select_related("category").all()
-#         serialized_items = MenuItemSerializer(items, many=True)
-#         return Response(serialized_items.data)
 
-#     # Post Request
-#     elif request.method == "POST":
-#         serialized_item = MenuItemSerializer(data=request.data)
-#         serialized_item.is_valid(raise_exception=True)
-#         serialized_item.save()
-#         return Response(serialized_item.data, status=status.HTTP_201_CREATED)
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def me(request):
+    return Response({"message": "Hello, " + request.user.username})
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def manager_view(request):
+    if request.user.groups.filter(name="Manager").exists():
+        return Response({"message": "Only Manager, Should See This"}, status=status.HTTP_200_OK)
+    else:
+        return Response({"message": "You are not authorized to see this"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def delevery_crew_view(request):
+    # delevery crew and manager can see this
+    if request.user.groups.filter(name="Manager").exists() or request.user.groups.filter(name="Delivery Crew").exists():
+        return Response({"message": "Only Manager and Delivery Crew, Should See This"}, status=status.HTTP_200_OK)
+    else:
+        return Response({"message": "You are not authorized to see this"}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 

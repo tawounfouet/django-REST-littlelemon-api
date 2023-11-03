@@ -10,3 +10,11 @@ python manage.py startapp LittleLemonAPI
 
 # git add and commit in one step
 git commit -am "Initial commit"
+
+# create simple user using the shell command
+python manage.py shell
+from django.contrib.auth.models import User
+user = User.objects.create_user('customer1', password='customer')
+user = User.objects.create_user('customer2', password='customer')
+user = User.objects.create_user('customer3', password='customer')
+user.save()
