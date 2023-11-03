@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 from .models import Category, MenuItem, Cart, Order, OrderItem
 from .serializers import CategorySerializer, MenuItemSerializer, CartSerializer, OrderSerializer, OrderItemSerializer
-
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 class CategoriesView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -19,8 +19,14 @@ class SingleCategoryView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
 
 class MenuItemsView(generics.ListCreateAPIView):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
+    ordering_fields = ['price', 'title']
+    filterset_fields = ['category', 'featured']
+    search_fields = ['title']
+
+
 
 
 class SingleMenuItemView(generics.RetrieveUpdateDestroyAPIView):
