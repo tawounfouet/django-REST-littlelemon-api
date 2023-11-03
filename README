@@ -18,3 +18,12 @@ user = User.objects.create_user('customer1', password='customer')
 user = User.objects.create_user('customer2', password='customer')
 user = User.objects.create_user('customer3', password='customer')
 user.save()
+```
+
+```bash
+# User registration and token generation endpoints
+# use Djoser in the project to automatically create the following endpoints and functionalities for you.
+
+# install Djoser using pipenv
+pipenv install djoser
+
