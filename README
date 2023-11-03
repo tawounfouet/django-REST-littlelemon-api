@@ -1,2 +1,12 @@
 Little Lemon API project - Graded Assignment
 
+```bash
+
+# Create a new project
+django-admin startproject LittleLemon .
+
+# Create a new app
+python manage.py startapp LittleLemonAPI
+
+# git add and commit in one step
+git commit -am "Initial commit"
